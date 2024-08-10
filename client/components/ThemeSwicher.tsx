@@ -11,11 +11,12 @@ const ThemeSwither = () => {
 
   useEffect(() => {
     setMounted(true);
+    console.log(theme)
   }, []);
 
   if(!mounted) return null;
   return (
-    <Tabs defaultValue="{theme}">
+    <Tabs defaultValue={theme}>
       <TabsList className="border">
         <TabsTrigger value="light" onClick={() => setTheme("light")}>
           <SunIcon className="h-[1.2rem] w-[1.2rem]" />
