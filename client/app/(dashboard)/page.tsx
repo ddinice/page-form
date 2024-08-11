@@ -1,3 +1,71 @@
-export default function Page() {
-  return <p>Dashboard Page</p>;
+import { GetFormStats } from "@/actions/form";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Suspense } from "react";
+
+export default function Dashboard() {
+  return (
+    <div className="container pt-4">
+      <Suspense fallback={<CardsStats loading={true}></CardsStats>}>
+        <CardsStatsWrapper></CardsStatsWrapper>
+      </Suspense>
+    </div>
+  )
 }
+
+async function CardsStatsWrapper() {
+  const stats = await GetFormStats();
+  return <CardsStats loading={false} data={stats} test="fdsf"/>
+}
+
+interface CardsStatsProps{
+  data?: Awaited<ReturnType<typeof GetFormStats>>;
+  loading: boolean;
+}
+
+interface CardStatProps{
+  title: string,
+  helperText: string,
+  value: string,
+  loading: boolean,
+  className: string
+}
+
+function CardsStats(props: CardsStatsProps) {
+  const {data, loading} = props;
+
+  return (
+    <div className="w-full pt-8 gap-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+      <CardStat
+        title="Total visits"
+        helperText="All time form visits"
+        value={data?.visits.toLocaleString() || "" }
+        loading={loading}
+        className="shadow-md shadow-blue-600"
+      />
+    </div>
+  )
+}
+
+function CardStat(props: CardStatProps){
+  const { title, helperText, value, className, loading } = props;
+  return (
+    <Card className={ className }>
+      <CardHeader className="flex flex-row items-center justify-between pb-2">
+        <CardTitle className="text-sm font-medium text-muted-foreground">
+          { title }
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="text-2xl font-bold">
+          { loading && 
+          <Skeleton>
+            <span className="opacity-0">0</span>
+          </Skeleton> }
+          { !loading && value }
+        </div>
+        <p className="text-xs text-muted-foreground pt-1">{ helperText }</p>
+      </CardContent>
+    </Card>
+  )
+} 
