@@ -1,6 +1,7 @@
 import { GetFormStats } from "@/actions/form";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Separator } from "@/components/ui/separator";
 import { Suspense } from "react";
 
 export default function Dashboard() {
@@ -9,13 +10,14 @@ export default function Dashboard() {
       <Suspense fallback={<CardsStats loading={true}></CardsStats>}>
         <CardsStatsWrapper></CardsStatsWrapper>
       </Suspense>
+      <Separator className="my-6"/>
     </div>
   )
 }
 
 async function CardsStatsWrapper() {
   const stats = await GetFormStats();
-  return <CardsStats loading={false} data={stats} test="fdsf"/>
+  return <CardsStats loading={false} data={stats} />
 }
 
 interface CardsStatsProps{
@@ -42,6 +44,30 @@ function CardsStats(props: CardsStatsProps) {
         value={data?.visits.toLocaleString() || "" }
         loading={loading}
         className="shadow-md shadow-blue-600"
+      />
+
+      <CardStat
+        title="Total submissions"
+        helperText="All time form submissions"
+        value={data?.submissions.toLocaleString() || "" }
+        loading={loading}
+        className="shadow-md shadow-yellow-600"
+      />
+
+      <CardStat
+        title="Submissions Rate"
+        helperText="Visits that result in form submissions"
+        value={data?.visits.toLocaleString() + "%" || "" }
+        loading={loading}
+        className="shadow-md shadow-green-600"
+      />
+
+      <CardStat
+        title="Bounce Rate"
+        helperText="Visits that leaves without interating"
+        value={data?.visits.toLocaleString() + "%" || "" }
+        loading={loading}
+        className="shadow-md shadow-red-600"
       />
     </div>
   )
