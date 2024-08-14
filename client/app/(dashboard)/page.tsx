@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@/components/ui/separator";
 import { Suspense } from "react";
+import CreateFormBtn from "@/components/form/CreateFormBtn";
 
 export default function Dashboard() {
   return (
@@ -11,6 +12,9 @@ export default function Dashboard() {
         <CardsStatsWrapper></CardsStatsWrapper>
       </Suspense>
       <Separator className="my-6"/>
+      <h2>Your Forms</h2>
+      <Separator className="my-6"/>
+      <CreateFormBtn />
     </div>
   )
 }
