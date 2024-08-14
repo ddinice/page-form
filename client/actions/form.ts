@@ -3,12 +3,14 @@
 import prisma from "@/lib/prisma";
 import { currentUser } from "@clerk/nextjs/server";
 
-class UserNotFoundError extends Error {}
+import { redirect } from 'next/navigation'
 
 export async function GetFormStats(){
   const user = await currentUser();
 
-  if(!user) throw new UserNotFoundError()
+  if(!user) {
+    redirect('/sign-in');
+  }
 
   const stats = await prisma.form.aggregate({
     where: {
